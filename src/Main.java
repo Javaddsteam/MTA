@@ -83,7 +83,7 @@ public class Main {
     private static void fillDijkstra() {
 
         //Line N
-        nodeTSLineN = new Node<>("Time Square Line N");
+        nodeTSLineN = new Node<>("Times Square Line N");
         node34LineN = new Node<>("34th Line N");
         node28LineN = new Node<>("28th Line N");
         node23LineN = new Node<>("23rd Line N");
@@ -144,18 +144,19 @@ public class Main {
     }
 
     public static void getDirections(int currentStation, char currentLine, int destinationStation, char destinationLine) {
+        //Over all this brute force time complexity is O(N)
         List<String> mapList = new ArrayList<>();
         int firstLineSteps = 0;
         int lastLineSteps = 0;
-        int currentLineSize = getLine(currentLine).size();
-        int destinationLineSize = getLine(destinationLine).size();
         List<String> currentLineList = getLine(currentLine);
         List<String> distenationLineList = getLine(destinationLine);
+        int currentLineSize = currentLineList.size();
+        int destinationLineSize = distenationLineList.size();
 
         if (currentLine == destinationLine) {
             firstLineSteps = getDistance(destinationStation - 1, currentStation - 1, currentLineSize);
             int temp = currentStation - 1;
-            for (int i = 0; i < firstLineSteps; i++) {
+            for (int i = 0; i <= firstLineSteps; i++) {
                 mapList.add(currentLineList.get(temp));
                 if (temp == currentLineSize - 1) {
                     temp = 0;
@@ -167,6 +168,7 @@ public class Main {
             firstLineSteps = getDistance(getLine(currentLine).indexOf(unionSquare), currentStation - 1, currentLineSize);
             lastLineSteps = getDistance(destinationStation - 1, getLine(destinationLine).indexOf(unionSquare), destinationLineSize);
             int temp = currentStation - 1;
+            // strict < to not get the intersection twice
             for (int i = 0; i < firstLineSteps; i++) {
                 mapList.add(currentLineList.get(temp));
                 if (temp == currentLineSize - 1) {
@@ -176,7 +178,7 @@ public class Main {
                 }
             }
             temp = getLine(destinationLine).indexOf(unionSquare);
-            for (int i = 0; i <= lastLineSteps; i++) {
+            for (int i = 0; i <=lastLineSteps; i++) {
                 mapList.add(distenationLineList.get(temp));
                 if (temp == destinationLineSize - 1) {
                     temp = 0;
@@ -195,6 +197,8 @@ public class Main {
         return ((toIndex - fromIndex) + length) % length;
     }
 
+
+    //Need function to get the stations selected by the user for dijkstra
     public static Node<String> getStationNode(char chosen, String chosenStation) {
 
         switch (chosen) {
@@ -230,6 +234,7 @@ public class Main {
     }
 
     public static void printStations(List<String> currentLineStations) {
+        //the numbers is just to constraint the user by int for his choice
         for (int i = 0; i < currentLineStations.size(); i++) {
             System.out.print("[" + (i + 1) + " - " + currentLineStations.get(i) + "]");
         }
