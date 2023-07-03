@@ -105,25 +105,37 @@ public class Main {
         nodeUnionSquare = new Node<>("Union Square");
 
         nodeTSLineN.addAdjacentNode(node34LineN, 1);
+        node34LineN.addAdjacentNode(nodeTSLineN, 1);
         node34LineN.addAdjacentNode(node28LineN, 1);
+        node28LineN.addAdjacentNode(node34LineN, 1);
         node28LineN.addAdjacentNode(node23LineN, 1);
+        node23LineN.addAdjacentNode(node28LineN, 1);
         node23LineN.addAdjacentNode(nodeUnionSquare, 1);
+        nodeUnionSquare.addAdjacentNode(node23LineN, 1);
         nodeUnionSquare.addAdjacentNode(node8LineN, 1);
-        node8LineN.addAdjacentNode(nodeTSLineN, 1);
+        node8LineN.addAdjacentNode(nodeUnionSquare, 1);
 
 
         node8LineL.addAdjacentNode(node6LineL, 1);
+        node6LineL.addAdjacentNode(node8LineL,1);
         node6LineL.addAdjacentNode(nodeUnionSquare, 1);
+        nodeUnionSquare.addAdjacentNode(node6LineL,1);
         nodeUnionSquare.addAdjacentNode(node3LineL, 1);
+        node3LineL.addAdjacentNode(nodeUnionSquare, 1);
         node3LineL.addAdjacentNode(node1LineL, 1);
-        node1LineL.addAdjacentNode(node8LineL, 1);
+        node1LineL.addAdjacentNode(node3LineL,1);
 
         nodeGCLine6.addAdjacentNode(node33Line6, 1);
+        node33Line6.addAdjacentNode(nodeGCLine6, 1);
         node33Line6.addAdjacentNode(node28Line6, 1);
+        node28Line6.addAdjacentNode(node33Line6, 1);
         node28Line6.addAdjacentNode(node23Line6, 1);
+        node23Line6.addAdjacentNode(node28Line6, 1);
         node23Line6.addAdjacentNode(nodeUnionSquare, 1);
+        nodeUnionSquare.addAdjacentNode(node23Line6, 1);
         nodeUnionSquare.addAdjacentNode(nodeAPLine6, 1);
-        nodeAPLine6.addAdjacentNode(nodeGCLine6, 1);
+        nodeAPLine6.addAdjacentNode(nodeUnionSquare, 1);
+
         dijkstraLineN = Arrays.asList(nodeTSLineN,
                 node34LineN,
                 node28LineN,
@@ -158,33 +170,22 @@ public class Main {
             int temp = currentStation - 1;
             for (int i = 0; i <= firstLineSteps; i++) {
                 mapList.add(currentLineList.get(temp));
-                if (temp == currentLineSize - 1) {
-                    temp = 0;
-                } else {
-                    temp++;
-                }
+                    temp = destinationStation-1 > currentStation-1 ? temp+1 : temp-1;
+
             }
         } else {
-            firstLineSteps = getDistance(getLine(currentLine).indexOf(unionSquare), currentStation - 1, currentLineSize);
-            lastLineSteps = getDistance(destinationStation - 1, getLine(destinationLine).indexOf(unionSquare), destinationLineSize);
+            firstLineSteps = getDistance(currentLineList.indexOf(unionSquare), currentStation - 1, currentLineSize);
+            lastLineSteps = getDistance(destinationStation - 1, distenationLineList.indexOf(unionSquare), destinationLineSize);
             int temp = currentStation - 1;
             // strict < to not get the intersection twice
             for (int i = 0; i < firstLineSteps; i++) {
                 mapList.add(currentLineList.get(temp));
-                if (temp == currentLineSize - 1) {
-                    temp = 0;
-                } else {
-                    temp++;
-                }
+                    temp = currentLineList.indexOf(unionSquare) > currentStation  ? temp+1 : temp-1;
             }
             temp = getLine(destinationLine).indexOf(unionSquare);
             for (int i = 0; i <=lastLineSteps; i++) {
                 mapList.add(distenationLineList.get(temp));
-                if (temp == destinationLineSize - 1) {
-                    temp = 0;
-                } else {
-                    temp++;
-                }
+                    temp = destinationStation > distenationLineList.indexOf(unionSquare) ? temp+1 : temp-1;
             }
         }
         System.out.println(mapList);
@@ -194,7 +195,7 @@ public class Main {
 
 
     public static int getDistance(int toIndex, int fromIndex, int length) {
-        return ((toIndex - fromIndex) + length) % length;
+        return Math.abs(toIndex - fromIndex);
     }
 
 
